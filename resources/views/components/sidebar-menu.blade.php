@@ -79,7 +79,7 @@
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Master Data</span>
     </li>
-    <li class="menu-item {{ request()->routeIs('products.*') ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->routeIs('products.*') || request()->routeIs('categories.*') ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-package"></i>
         <div data-i18n="Produk">Produk</div>
@@ -95,9 +95,14 @@
             <div data-i18n="Daftar Produk">Daftar Produk</div>
           </a>
         </li>
-        <li class="menu-item">
-          <a href="#" class="menu-link">
-            <div data-i18n="Daftar Kategori Produk">Daftar Kategori Produk</div>
+        <li class="menu-item {{ request()->routeIs('categories.index') ? 'active' : '' }}">
+          <a href="{{ route('categories.index') }}" class="menu-link">
+            <div data-i18n="Daftar Kategori Produk">Daftar Kategori</div>
+          </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('categories.create') ? 'active' : '' }}">
+          <a href="{{ route('categories.create') }}" class="menu-link">
+            <div data-i18n="Tambah Kategori">Tambah Kategori</div>
           </a>
         </li>
       </ul>
