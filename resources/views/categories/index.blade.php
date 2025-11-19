@@ -15,11 +15,40 @@
 @endif
 
 <div class="card">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0">Daftar Kategori Produk</h5>
-    <a href="{{ route('categories.create') }}" class="btn btn-primary">
-      <i class="bx bx-plus me-1"></i> Tambah Kategori
-    </a>
+  <div class="card-header">
+    <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center mb-3">
+      <h5 class="mb-0 flex-grow-1">Daftar Kategori Produk</h5>
+      <a href="{{ route('categories.create') }}" class="btn btn-primary align-self-start align-self-lg-center">
+        <i class="bx bx-plus me-1"></i> Tambah Kategori
+      </a>
+    </div>
+
+    <div class="d-flex flex-column flex-lg-row gap-2">
+      <form method="GET" action="{{ route('categories.index') }}" class="row g-2 flex-grow-1">
+        <div class="col-sm-8 col-md-6 col-lg-10">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bx bx-search"></i></span>
+            <input
+              type="text"
+              name="search"
+              class="form-control"
+              placeholder="Cari nama kategori..."
+              value="{{ request('search') }}"
+            />
+          </div>
+        </div>
+        <div class="col-sm-4 col-md-3 col-lg-2 d-flex gap-2">
+          <button class="btn btn-primary flex-grow-1" type="submit">
+            <i class="bx bx-search-alt me-1"></i> Cari
+          </button>
+          @if(request('search'))
+          <a href="{{ route('categories.index') }}" class="btn btn-outline-secondary" title="Reset pencarian">
+            <i class="bx bx-reset"></i>
+          </a>
+          @endif
+        </div>
+      </form>
+    </div>
   </div>
   <div class="table-responsive text-nowrap">
     <table class="table">

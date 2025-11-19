@@ -12,11 +12,21 @@ class CategoryController extends Controller
     /**
      * Display a listing of the categories.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $categories = Category::orderBy('created_at', 'desc')->get();
+        $search = $request->query('search');
 
-        return view('categories.index', compact('categories'));
+        $categories = Category::query()
+            ->when($search, function ($query, $search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('categories.index', [
+            'categories' => $categories,
+            'search' => $search,
+        ]);
     }
 
     /**
