@@ -46,45 +46,21 @@
               <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-outline-primary">
                 <i class="bx bx-edit-alt"></i>
               </a>
-              <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $category->id }}">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger btn-delete-category"
+                data-id="{{ $category->id }}"
+                data-name="{{ $category->nama }}"
+              >
                 <i class="bx bx-trash"></i>
               </button>
+              <form id="delete-category-{{ $category->id }}" action="{{ route('categories.destroy', $category) }}" method="POST" class="d-none">
+                @csrf
+                @method('DELETE')
+              </form>
             </div>
           </td>
         </tr>
-
-        <!-- Delete Confirmation Modal -->
-        <div class="modal fade" id="deleteModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalTitle{{ $category->id }}">Konfirmasi Hapus</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus kategori <strong>"{{ $category->nama }}"</strong>?</p>
-                <p class="text-danger mb-0">Tindakan ini tidak dapat dibatalkan.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                  Batal
-                </button>
-                <form action="{{ route('categories.destroy', $category) }}" method="POST" class="d-inline">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="btn btn-danger">
-                    <i class="bx bx-trash me-1"></i> Hapus
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
         @empty
         <tr>
           <td colspan="5" class="text-center py-4">
@@ -98,18 +74,55 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+  .swal2-container {
+    z-index: 2050 !important;
+  }
+</style>
+@endpush
+
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  // Alert success dengan auto dismiss
-  @if(session('success'))
-    setTimeout(function() {
-      const alert = document.querySelector('.alert-success');
-      if (alert) {
-        const bsAlert = new bootstrap.Alert(alert);
-        bsAlert.close();
-      }
-    }, 3000);
-  @endif
+  document.addEventListener('DOMContentLoaded', function () {
+    // Alert success dengan auto dismiss
+    @if(session('success'))
+      setTimeout(function() {
+        const alert = document.querySelector('.alert-success');
+        if (alert) {
+          const bsAlert = new bootstrap.Alert(alert);
+          bsAlert.close();
+        }
+      }, 3000);
+    @endif
+
+    // SweetAlert delete confirmation
+    const deleteButtons = document.querySelectorAll('.btn-delete-category');
+    deleteButtons.forEach(function(button) {
+      button.addEventListener('click', function () {
+        const categoryId = this.dataset.id;
+        const categoryName = this.dataset.name;
+        const form = document.getElementById(`delete-category-${categoryId}`);
+
+        Swal.fire({
+          title: 'Konfirmasi Hapus',
+          html: `Apakah Anda yakin ingin menghapus kategori <strong>\"${categoryName}\"</strong>?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Ya, Hapus',
+          cancelButtonText: 'Batal',
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed && form) {
+            form.submit();
+          }
+        });
+      });
+    });
+  });
 </script>
 @endpush
 
