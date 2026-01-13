@@ -77,6 +77,14 @@ class ProductController extends Controller
     }
 
     /**
+     * Display the specified product (user-facing detail page).
+     */
+    public function show(Product $product): View
+    {
+        return view('products.show', compact('product'));
+    }
+
+    /**
      * Update the specified product in storage.
      */
     public function update(Request $request, Product $product): RedirectResponse
