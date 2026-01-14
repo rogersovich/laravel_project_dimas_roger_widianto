@@ -19,10 +19,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0
-,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0
+,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-
 customizer-core-css" />
@@ -40,17 +38,6 @@ scrollbar.css" />
 </head>
 
 <body>
-    {{-- <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </div>
-
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            {{ $slot }}
-        </div>
-    </div> --}}
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
@@ -59,8 +46,8 @@ scrollbar.css" />
                         <div class="app-brand justify-content-center">
                             <a href="index.html" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
-                                    <svg width="25" viewBox="0 0 25 42" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <defs>
                                             <path d="M13.7918663,0.358365126 L3.39788168,7.44174259
         C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551
@@ -113,8 +100,7 @@ scrollbar.css" />
                                                             </use>
                                                         </g>
                                                     </g>
-                                                    <g id="Triangle"
-                                                        transform="translate(19.000000, 11.000000) rotate(-300.000000)
+                                                    <g id="Triangle" transform="translate(19.000000, 11.000000) rotate(-300.000000)
         translate(-19.000000, -11.000000) ">
                                                         <use fill="#696cff" xlink:href="#path-5"></use>
                                                         <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5">

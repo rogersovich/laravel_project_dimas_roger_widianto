@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->date('tanggal');
             $table->decimal('total', 12, 2);
+            $table->string('nama_penerima');
+            $table->text('alamat_pengiriman');
+            $table->string('telepon');
+            $table->string('metode_pembayaran');
             $table->string('bukti_pembayaran')->nullable();
             $table->enum('status_pembayaran', ['pending', 'lunas', 'gagal', 'diproses'])->default('pending');
             $table->timestamps();

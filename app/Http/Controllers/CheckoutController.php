@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -17,7 +20,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Proses checkout
+     * Proses checkout - simpan ke database
      */
     public function process(Request $request)
     {
@@ -34,9 +37,38 @@ class CheckoutController extends Controller
             'metode' => 'required|string',
         ]);
 
-        // Untuk sekarang kita anggap sukses
-        Session::forget('cart'); // Kosongkan keranjang setelah checkout
+        // Hitung grand total
+        $grandTotal = 0;
+        foreach ($cart as $item) {
+            $grandTotal += $item['harga'] * $item['quantity'];
+        }
 
-        return redirect()->route('checkout.index')->with('success', 'Pesanan berhasil diproses! Terima kasih sudah berbelanja.');
+        // Simpan order ke database
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'tanggal' => now(),
+            'total' => $grandTotal,
+            'nama_penerima' => $validated['nama'],
+            'alamat_pengiriman' => $validated['alamat'],
+            'telepon' => $validated['telepon'],
+            'metode_pembayaran' => $validated['metode'],
+            'status_pembayaran' => 'pending',
+        ]);
+
+        // Simpan order products
+        foreach ($cart as $productId => $item) {
+            OrderProduct::create([
+                'order_id' => $order->id,
+                'product_id' => $productId,
+                'jumlah' => $item['quantity'],
+                'harga_satuan' => $item['harga'],
+            ]);
+        }
+
+        // Kosongkan keranjang setelah checkout
+        Session::forget('cart');
+
+        return redirect()->route('orders.history')->with('success', 'Pesanan berhasil diproses! Terima kasih sudah berbelanja.');
     }
 }
+

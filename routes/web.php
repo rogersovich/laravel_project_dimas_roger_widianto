@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -21,29 +22,40 @@ Route::get('/', function () {
 // Product Detail (User-facing)
 Route::get('/product/{product}', [ProductController::class, 'show'])->name('products.show');
 
-// Cart Routes
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+// ========================================
+// AUTHENTICATED USER ROUTES
+// ========================================
 
-// Checkout Routes
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::middleware('auth')->group(function () {
+    // Cart Routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Checkout Routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+    // Order History Routes
+    Route::get('/orders', [OrderController::class, 'history'])->name('orders.history');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 // ========================================
-// ADMIN ROUTES (Authenticated)
+// ADMIN ROUTES (Authenticated + Admin Role)
 // ========================================
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+Route::middleware(['auth', 'admin'])->group(function () {
     // Product Routes (Admin CRUD)
     Route::get('/admin/product', [ProductController::class, 'index'])->name('products.index');
     Route::get('/admin/product/tambah', [ProductController::class, 'create'])->name('products.create');
@@ -62,4 +74,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
 
